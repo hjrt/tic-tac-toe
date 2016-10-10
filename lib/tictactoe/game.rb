@@ -13,11 +13,16 @@ module TicTacToe
 		end
 
 		def solicit_move
-			"#{current_player.name}: Enter a number between 1 and 9 to make your move"
+			"#{current_player.name}: Enter a number between 1 and 9 to make your move or enter 'quit' to close the program"
 		end
 
 		def get_move(human_move = gets.chomp)
+			@human_move = human_move
 			human_move_to_coordinate(human_move)
+		end
+
+		def valid_input
+			@human_move.to_i.between?(1,9) && @human_move != "/n"
 		end
 
 		def game_over_message
@@ -32,7 +37,19 @@ module TicTacToe
 				puts ""
 				puts solicit_move
 				x, y = get_move
-				board.set_cell(x,y, current_player.color)
+				return if @human_move == "quit"
+				until valid_input
+					puts solicit_move
+					x, y = get_move
+					return if @human_move == "quit"
+				end
+				if board.not_taken(x, y)
+					board.set_cell(x,y, current_player.color)
+				else
+					puts "I'm sorry #{current_player.name}, but this cell has already been taken. Choose another one"
+					x,y = get_move
+					board.set_cell(x,y, current_player.color)
+				end
 				if board.game_over
 					puts game_over_message
 					board.formatted_grid

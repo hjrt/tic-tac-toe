@@ -10,6 +10,10 @@ module TicTacToe
   	 grid[y][x]
     end
 
+    def not_taken(x, y)
+      get_cell(x, y).value.empty?
+    end
+
     def set_cell(x, y, value)
       get_cell(x, y).value = value
     end
