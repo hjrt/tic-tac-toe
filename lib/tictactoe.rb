@@ -1,4 +1,4 @@
-require "tictactoe/version"
+require_relative "tictactoe/version"
 
 module TicTacToe
   
