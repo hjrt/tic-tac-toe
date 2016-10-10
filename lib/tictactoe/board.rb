@@ -7,16 +7,16 @@ module TicTacToe
     end
 
     def get_cell(x, y)
-  		grid[y][x]
-		end
+  	 grid[y][x]
+    end
 
-		def set_cell(x, y, value)
-  		get_cell(x, y).value = value
-		end
+    def set_cell(x, y, value)
+      get_cell(x, y).value = value
+    end
 
-		def game_over
-			return :winner if winner?
-			return :draw if draw?
+    def game_over
+      return :winner if winner?
+      return :draw if draw?
     end
 
     
@@ -42,6 +42,18 @@ module TicTacToe
         [get_cell(0,2), get_cell(1,1), get_cell(2,0)]
       ]
     end
-    
+
+    def winner?
+      winning_positions.each do |winning_position|
+        next if winning_position_values(winning_position).all_empty?
+        return true if winning_position_values(winning_position).all_same?
+      end
+      false
+    end
+
+    def winning_position_values(winning_position)
+      winning_position.map {|cell| cell.value}
+    end
+
   end
 end
