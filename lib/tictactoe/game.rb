@@ -12,6 +12,11 @@ module TicTacToe
 			@current_player, @other_player = @other_player, @current_player
 		end
 
+		def welcome_message
+			"Welcome to Tic Tac Toe"
+		end
+
+
 		def solicit_move
 			"#{current_player.name}: Enter a number between 1 and 9 to make your move or enter 'quit' to close the program"
 		end
@@ -19,6 +24,10 @@ module TicTacToe
 		def get_move(human_move = gets.chomp)
 			@human_move = human_move
 			human_move_to_coordinate(human_move)
+		end
+
+		def check_if_quit
+			exit if @human_move.to_s.downcase == "quit"
 		end
 
 		def valid_input
@@ -30,18 +39,30 @@ module TicTacToe
 			return "The game ended in a tie" if board.game_over == :draw
 		end
 
+		def play_again
+			puts "do you wanna play again?"
+			input = gets.chomp
+			if input.downcase== "yes"
+				g = Game.new #you gotta change initialize method to make it work
+				g.play
+			else
+				exit
+			end
+		end
+
 		def play
 			puts "#{current_player.name} has been randomly selected as the first player"
 			while true
+				puts welcome_message
 				board.formatted_grid
 				puts ""
 				puts solicit_move
 				x, y = get_move
-				return if @human_move == "quit"
+				check_if_quit
 				until valid_input
 					puts solicit_move
 					x, y = get_move
-					return if @human_move == "quit"
+					check_if_quit
 				end
 				if board.not_taken(x, y)
 					board.set_cell(x,y, current_player.color)
@@ -53,7 +74,8 @@ module TicTacToe
 				if board.game_over
 					puts game_over_message
 					board.formatted_grid
-					return
+					play_again
+					#return
 				else
 					switch_players
 				end

@@ -34,12 +34,20 @@ module TicTacToe
 				expect(game.other_player).to eq current_player
 			end
 		end
+
+		context "#welcome_message" do
+			it "greets players" do
+				game = Game.new([bob,frank])
+				expected = "Welcome to Tic Tac Toe"
+				expect(game.welcome_message).to eq expected
+			end
+		end
 		
 		context "#solicit_move" do
 			it "asks the player to make a move" do
 				game = Game.new([bob, frank])
 				allow(game).to receive(:current_player) {bob}
-				expected = "Bob: Enter a number between 1 and 9 to make your move"
+				expected = "Bob: Enter a number between 1 and 9 to make your move or enter 'quit' to close the program"
 				expect(game.solicit_move).to eq expected
 			end
 		end
@@ -61,6 +69,15 @@ module TicTacToe
 				game.get_move("x")
 			end
 		end
+
+		context "#check_if_quit" do
+			it "exits if player types 'quit'" do
+				game = Game.new([bob, frank])
+				allow(game).to receive(:get_move).with("quit")
+				expect{game.check_if_quit; exit}.to raise_error SystemExit
+			end
+		end
+
 
 		context "#game_over_message" do
 			it "returns '{current player name} won!' if board shows a winner" do
