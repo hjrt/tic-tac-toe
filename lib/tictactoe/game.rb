@@ -2,20 +2,78 @@ module TicTacToe
 	class Game
 		attr_reader :players, :board, :current_player, :other_player
 
-		def initialize (players, board = Board.new)
-			@players = players
+		def initialize (board = Board.new)
 			@board = board
-			@current_player, @other_player = players.shuffle
+			#@current_player, @other_player = players.shuffle
+		end
+
+		def beginning
+			puts "Welcome to TicTacToe"
+			puts "You can choose between following options:
+			1) human vs human
+			2) human vs computer
+			3) computer vs computer"
+			puts "Enter an option number - 1, 2 or 3"
+			choice = check_choice
+			if choice == "1"
+				puts "Tell me your name. Or your friend's name. Or just a name."
+				name = check_name
+				puts "Do you wanna play with 'X' or with 'O'?"
+				color = check_color
+				set_player(name, color)
+			elsif choice == "2"
+			elsif choice == "3"
+			end
+		end
+
+		def check_choice
+			begin
+				choice = gets.chomp
+				unless choice.to_i.between?(1,3)
+					raise "Not cool. Don't cheat. Enter 1, 2 or 3"
+				end
+			rescue => e
+				puts "#{e}"
+				retry
+			else
+				return choice
+			end
+		end
+
+		def check_name
+			begin
+				name = gets.chomp
+				if name == "/n"
+					raise "Name, you know, with letters and stuff."
+				end
+			rescue => e
+				puts "#{e}"
+				retry
+			else
+				return name
+			end
+		end
+
+		def check_color
+			begin
+				color = gets.chomp
+				unless color.upcase == "X" || "O"
+					raise "No other options, sorry. Just simple X and O."
+				end
+			rescue => e
+				puts "#{e}"
+				retry
+			else
+				return color
+			end
+		end
+
+		def set_player
 		end
 
 		def switch_players
 			@current_player, @other_player = @other_player, @current_player
 		end
-
-		def welcome_message
-			"Welcome to Tic Tac Toe"
-		end
-
 
 		def solicit_move
 			"#{current_player.name}: Enter a number between 1 and 9 to make your move or enter 'quit' to close the program"
@@ -51,9 +109,9 @@ module TicTacToe
 		end
 
 		def play
+			beginning
 			puts "#{current_player.name} has been randomly selected as the first player"
 			while true
-				puts welcome_message
 				board.formatted_grid
 				puts ""
 				puts solicit_move

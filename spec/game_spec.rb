@@ -70,11 +70,25 @@ module TicTacToe
 			end
 		end
 
-		context "#check_if_quit" do
-			it "exits if player types 'quit'" do
+		context "#check_if_quit" do 
+			it "exits if player types 'quit'" do #it doesn't work properly
 				game = Game.new([bob, frank])
-				allow(game).to receive(:get_move).with("quit")
+				game.instance_variable_set(:@human_move, "quit")
 				expect{game.check_if_quit; exit}.to raise_error SystemExit
+			end
+		end
+
+		context "valid_input" do
+			it "returns true if player's choice is a number between 1 and 9" do
+				game = Game.new([bob, frank])
+				game.instance_variable_set(:@human_move, "8")
+				expect(game.valid_input).to be true
+			end
+
+			it "returns false if player's choice isn't a number between 1 and 9" do
+				game = Game.new([bob,frank])
+				game.instance_variable_set(:@human_move, "blep2")
+				expect(game.valid_input).to be false
 			end
 		end
 
