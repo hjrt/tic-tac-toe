@@ -3,6 +3,7 @@ module TicTacToe
 		attr_reader :players, :board, :current_player, :other_player
 
 		def initialize (board = Board.new)
+			#@players = players
 			@board = board
 			#@current_player, @other_player = players.shuffle
 		end
@@ -16,13 +17,12 @@ module TicTacToe
 			puts "Enter an option number - 1, 2 or 3"
 			choice = check_choice
 			if choice == "1"
-				puts "Tell me your name. Or your friend's name. Or just a name."
-				name = check_name
-				puts "Do you wanna play with 'X' or with 'O'?"
-				color = check_color
-				set_player(name, color)
+				human_vs_human
 			elsif choice == "2"
+				human_vs_computer
 			elsif choice == "3"
+				puts "So you just wanna watch how 2 computers fighting with each other? That's cool."
+				set_player()
 			end
 		end
 
@@ -40,11 +40,37 @@ module TicTacToe
 			end
 		end
 
+		def human_vs_human
+			puts "Tell me your name. Or your friend's name. Or just a name."
+			name = check_name
+			puts "Do you wanna play with 'X' or with 'O'?"
+			color = check_color
+			set_player(name, color, true, true)
+			puts "Great. Now tell me a second player's name."
+			name = check_name
+			color = check_available_color
+			puts "Well #{name}, you don't have much choice. You'll play with '#{color}'"
+			set_player(name, color, true, false)
+			@players = @player1, @player2
+		end
+
+		def human_vs_computer
+			puts "Tell me your name. Or your friend's name. Or just a name."
+			name = check_name
+			puts "Do you wanna play with 'X' or with 'O'?"
+			color = check_color
+			set_player(name, color, true, true)
+			color = check_available_color
+			set_player("Computer", color, false, false)
+			puts "Rad. Your opponent is #{@player2.name}"
+			@players = @player1, @player2
+		end
+
 		def check_name
 			begin
-				name = gets.chomp
+				name = gets.chomp.capitalize
 				if name == "/n"
-					raise "Name, you know, with letters and stuff."
+					raise "Name, you know, letters and stuff."
 				end
 			rescue => e
 				puts "#{e}"
@@ -56,8 +82,8 @@ module TicTacToe
 
 		def check_color
 			begin
-				color = gets.chomp
-				unless color.upcase == "X" || "O"
+				color = gets.chomp.upcase
+				unless color == "X" || color == "O"
 					raise "No other options, sorry. Just simple X and O."
 				end
 			rescue => e
@@ -68,8 +94,26 @@ module TicTacToe
 			end
 		end
 
-		def set_player
+		def set_player(name, color, human, first) #change it to optional arguments
+			if human
+				if first
+					@player1 = Player.new({name: name, color: color})
+				else
+					@player2 = Player.new({name: name, color: color})
+				end
+			else
+					@player2 = Computer.new({name: name, color: color})
+			end
 		end
+
+		def check_available_color
+			if @player1.color == "X"
+				return "O"
+			else
+				return "X"
+			end
+		end
+
 
 		def switch_players
 			@current_player, @other_player = @other_player, @current_player
@@ -110,6 +154,7 @@ module TicTacToe
 
 		def play
 			beginning
+			#shuffle
 			puts "#{current_player.name} has been randomly selected as the first player"
 			while true
 				board.formatted_grid
