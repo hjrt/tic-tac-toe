@@ -21,8 +21,7 @@ module TicTacToe
 			elsif choice == "2"
 				human_vs_computer
 			elsif choice == "3"
-				puts "So you just wanna watch how 2 computers fighting with each other? That's cool."
-				set_player()
+				computer_vs_computer
 			end
 		end
 
@@ -66,6 +65,12 @@ module TicTacToe
 			@players = @player1, @player2
 		end
 
+		def computer_vs_computer
+			puts "So you just wanna watch how 2 computers fighting with each other? That's cool."
+			set_computer
+			@players = @player1, @player2
+		end
+
 		def check_name
 			begin
 				name = gets.chomp.capitalize
@@ -94,7 +99,7 @@ module TicTacToe
 			end
 		end
 
-		def set_player(name, color, human, first) #change it to optional arguments
+		def set_player(name, color, human, first)
 			if human
 				if first
 					@player1 = Player.new({name: name, color: color})
@@ -106,6 +111,11 @@ module TicTacToe
 			end
 		end
 
+		def set_computer
+			@player1 = Computer.new({name:"Computer 1", color: "X"})
+			@player2 = Computer.new({name: "Computer 2", color: "O"})
+		end
+
 		def check_available_color
 			if @player1.color == "X"
 				return "O"
@@ -114,6 +124,10 @@ module TicTacToe
 			end
 		end
 
+		def shuffle_players
+			@current_player, @other_player = players.shuffle
+			puts "#{current_player.name} has been randomly selected as the first player"
+		end
 
 		def switch_players
 			@current_player, @other_player = @other_player, @current_player
@@ -154,8 +168,7 @@ module TicTacToe
 
 		def play
 			beginning
-			#shuffle
-			puts "#{current_player.name} has been randomly selected as the first player"
+			shuffle_players
 			while true
 				board.formatted_grid
 				puts ""
