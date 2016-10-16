@@ -7,5 +7,14 @@ module TicTacToe
       @name = input.fetch(:name)
     end
     
+    def color=(color)
+    	@color = color
+    	if color == "X"
+      	@opponent_color = "O"
+    	else
+      	@opponent_color = "X"
+    	end
+  	end
+  
   end
 end

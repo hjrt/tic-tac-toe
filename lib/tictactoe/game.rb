@@ -137,9 +137,13 @@ module TicTacToe
 			"#{current_player.name}: Enter a number between 1 and 9 to make your move or enter 'quit' to close the program"
 		end
 
-		def get_move(human_move = gets.chomp)
+		def get_human_move(human_move = gets.chomp)
 			@human_move = human_move
 			human_move_to_coordinate(human_move)
+		end
+
+		def get_computer_move(board)
+			computer.move(board)
 		end
 
 		def check_if_quit
@@ -165,6 +169,7 @@ module TicTacToe
 				exit
 			end
 		end
+
 
 		def play
 			beginning

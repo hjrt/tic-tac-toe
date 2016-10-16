@@ -52,6 +52,22 @@ module TicTacToe
       ]
     end
 
+    def two_in_row?(row, color)
+      amount_of_one_color_in_row == 2 && amount_of_free_cells_in_row == 1
+    end
+
+    def amount_of_one_color_in_row(row, color)
+      row.select {|cell| cell.value == color}.length
+    end
+
+    def amount_of_free_cells_in_row(row, color)
+      row.select {|cell| cell.value == ""}.length
+    end
+
+    def get_free_cell
+    end
+
+
     def winner?
       winning_positions.each do |winning_position|
         next if winning_position_values(winning_position).all_empty?
