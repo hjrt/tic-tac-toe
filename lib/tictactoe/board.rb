@@ -52,21 +52,29 @@ module TicTacToe
       ]
     end
 
+    def corners
+      [get_cell(0,0), get_cell(2,0), get_cell(0,2), get_cell(2,2)]
+    end
+
     def two_in_row?(row, color)
-      amount_of_one_color_in_row == 2 && amount_of_free_cells_in_row == 1
+      amount_of_one_color_in_row(row, color) == 2 && amount_of_free_cells_in_row(row) == 1
+    end
+
+    def one_in_row?(row, color)
+      amount_of_one_color_in_row(row, color) == 1 && amount_of_free_cells_in_row(row) == 2
     end
 
     def amount_of_one_color_in_row(row, color)
       row.select {|cell| cell.value == color}.length
     end
 
-    def amount_of_free_cells_in_row(row, color)
+    def amount_of_free_cells_in_row(row)
       row.select {|cell| cell.value == ""}.length
     end
 
-    def get_free_cell
+    def get_free_cell(row)
+      row.select {|cell| cell.value == ""}.first
     end
-
 
     def winner?
       winning_positions.each do |winning_position|
