@@ -56,6 +56,26 @@ module TicTacToe
       [get_cell(0,0), get_cell(2,0), get_cell(0,2), get_cell(2,2)]
     end
 
+    def opposite_corners(cell)
+      if cell == get_cell(0,0)
+        get_cell(2,2)
+      elsif cell == get_cell(2,2)
+        get_cell(0,0)
+      elsif cell == get_cell(0,2)
+        get_cell(2,0)
+      elsif cell == get_cell(2,0)
+        get_cell(0,2)
+      end
+    end
+
+    def center
+      get_cell(1,1)
+    end
+
+    def sides_middle
+      [get_cell(1,0), get_cell(0,1), get_cell(2,1), get_cell(1,2)]
+    end
+
     def two_in_row?(row, color)
       amount_of_one_color_in_row(row, color) == 2 && amount_of_free_cells_in_row(row) == 1
     end
