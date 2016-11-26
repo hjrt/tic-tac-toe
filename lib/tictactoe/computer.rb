@@ -1,8 +1,14 @@
+
 module TicTacToe
   class Computer<Player
+    attr_reader :color, :name
+
+    def initialize(input)
+      super
+    end
 
     #http://programmers.stackexchange.com/questions/213559/algorithm-to-create-an-tictactoe-game-ai
-    def move(board) #board.grid? or grid?
+    def move(board)
       move = win_move(board) ||
         block_move(board) ||
         fork_move(board) ||

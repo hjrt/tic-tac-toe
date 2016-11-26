@@ -1,18 +1,17 @@
 module TicTacToe
   class Player
-    attr_reader :color, :name
+    attr_reader :color, :name, :opponent_color
 
     def initialize(input)
       @color = input.fetch(:color)
       @name = input.fetch(:name)
     end
     
-    def color=(color)
-    	@color = color
-    	if color == "X"
-      	@opponent_color = "O"
+    def opponent_color
+    	if self.color == "X"
+      	"O"
     	else
-      	@opponent_color = "X"
+      	"X"
     	end
   	end
   

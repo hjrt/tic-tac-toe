@@ -1,13 +1,19 @@
 module TicTacToe
   class Board
-  	attr_reader :grid
+    attr_reader :grid
 
     def initialize(input = {})
       @grid = input.fetch(:grid, default_grid)
     end
 
+    def formatted_grid
+      grid.each do |row|
+        puts row.map {|cell| cell.value.empty? ? "-" : cell.value}.join("|")
+      end
+    end
+
     def get_cell(x, y)
-  	 grid[y][x]
+     grid[y][x]
     end
 
     def not_taken(x, y)
@@ -18,25 +24,32 @@ module TicTacToe
       get_cell(x, y).value = value
     end
 
+    def set_computer_cell(move, color)
+      case move
+      when grid[0][0] 
+        set_cell(0, 0, color)
+      when grid[0][1]
+        set_cell(1, 0, color)
+      when grid[0][2]
+        set_cell(2, 0, color)
+       when grid[1][0]
+        set_cell(0, 1, color)
+      when grid[1][1]
+        set_cell(1, 1, color)
+      when grid[1][2]
+        set_cell(2, 1, color)
+      when grid[2][0]
+        set_cell(0, 2, color)
+      when grid[2][1]
+        set_cell(1, 2, color)
+      when grid[2][2]
+        set_cell(2, 2, color)
+      end
+    end
+
     def game_over
       return :winner if winner?
       return :draw if draw?
-    end
-
-    def formatted_grid
-      grid.each do |row|
-        puts row.map {|cell| cell.value.empty? ? "-" : cell.value}.join("|")
-      end
-    end
-    
-    private
- 
-    def default_grid
-      Array.new(3) { Array.new(3) { Cell.new } }  #[[Cell.new]*3]*3
-    end
-
-    def draw?
-      grid.flatten.map {|cell| cell.value}.none_empty?
     end
 
     def winning_positions
@@ -57,13 +70,14 @@ module TicTacToe
     end
 
     def opposite_corners(cell)
-      if cell == get_cell(0,0)
+      case cell
+      when get_cell(0,0)
         get_cell(2,2)
-      elsif cell == get_cell(2,2)
+      when get_cell(2,2)
         get_cell(0,0)
-      elsif cell == get_cell(0,2)
+      when get_cell(0,2)
         get_cell(2,0)
-      elsif cell == get_cell(2,0)
+      when get_cell(2,0)
         get_cell(0,2)
       end
     end
@@ -94,6 +108,16 @@ module TicTacToe
 
     def get_free_cell(row)
       row.select {|cell| cell.value == ""}.first
+    end
+
+    private
+
+    def default_grid
+      Array.new(3) { Array.new(3) { Cell.new } }  #[[Cell.new]*3]*3
+    end
+
+    def draw?
+      grid.flatten.map {|cell| cell.value}.none_empty?
     end
 
     def winner?
